@@ -1,33 +1,36 @@
-// Load the case framework data
+// ===================== GLOBAL STATE =====================
+
 let caseData = null;
 let selectedIndustry = null;
 
-// Timer and tracking state
 let timerInterval = null;
 let timerSeconds = 0;
 let isPaused = false;
 let practiceHistory = [];
 let currentCaseSession = null;
 
-// Initialize app
+// ===================== INIT =============================
+
 async function init() {
     try {
         const response = await fetch('case_framework_data.json');
         caseData = await response.json();
 
-        // Load practice history from localStorage
+        // Load practice history
         loadPracticeHistory();
 
+        // Populate UI
         populateIndustryDropdown();
+        populateAIGeneratorDropdowns();
         renderComboCases();
         updatePracticeStats();
 
-        // Event listeners
+        // Framework tab
         document.getElementById('industry-select').addEventListener('change', handleIndustryChange);
         document.getElementById('random-industry-btn').addEventListener('click', selectRandomIndustry);
         document.querySelector('.close-btn').addEventListener('click', closeModal);
 
-        // Timer controls
+        // Timer
         document.getElementById('start-timer-btn').addEventListener('click', startTimer);
         document.getElementById('pause-timer-btn').addEventListener('click', pauseTimer);
         document.getElementById('reset-timer-btn').addEventListener('click', resetTimer);
@@ -38,7 +41,12 @@ async function init() {
 
         // Settings
         document.getElementById('save-api-key-btn').addEventListener('click', saveAPIKey);
+        document.getElementById('test-api-key-btn').addEventListener('click', testAPIKey);
         document.getElementById('clear-history-btn').addEventListener('click', clearHistory);
+
+        // API key status + load into input
+        updateAPIKeyStatus();
+        loadAPIKey();
 
         // Close modal on outside click
         document.getElementById('case-modal').addEventListener('click', (e) => {
@@ -47,10 +55,124 @@ async function init() {
             }
         });
 
+        initTabs();
     } catch (error) {
         console.error('Error loading case data:', error);
         alert('Error loading case framework data. Please check console.');
     }
+}
+
+// ================= API KEY MANAGEMENT ===================
+
+function updateAPIKeyStatus() {
+    const apiKey = localStorage.getItem('tamu_api_key');
+    const statusDiv = document.getElementById('api-key-status');
+
+    if (apiKey && apiKey.length > 0) {
+        statusDiv.innerHTML = '<p style="color: #28a745;">✅ API Key saved (length: ' + apiKey.length + ' characters)</p>';
+    } else {
+        statusDiv.innerHTML = '<p style="color: #dc3545;">❌ No API key saved</p>';
+    }
+}
+
+function saveAPIKey() {
+    const apiKey = document.getElementById('api-key-input').value.trim();
+
+    if (!apiKey) {
+        alert('Please enter an API key.');
+        return;
+    }
+    if (apiKey.length < 10) {
+        alert('API key seems too short. Please check and try again.');
+        return;
+    }
+
+    localStorage.setItem('tamu_api_key', apiKey);
+    console.log('API Key saved to localStorage:', apiKey.substring(0, 10) + '...');
+
+    alert(
+        'TAMU API key saved successfully!\n\n' +
+        'Key length: ' + apiKey.length + ' characters\n\n' +
+        'You can now generate AI cases.'
+    );
+
+    updateAPIKeyStatus();
+}
+
+function loadAPIKey() {
+    const apiKey = localStorage.getItem('tamu_api_key');
+    if (apiKey) {
+        const input = document.getElementById('api-key-input');
+        if (input) input.value = apiKey;
+    }
+}
+
+async function testAPIKey() {
+    const apiKey = localStorage.getItem('tamu_api_key');
+
+    if (!apiKey) {
+        alert('No API key found. Please save one first.');
+        return;
+    }
+
+    const testBtn = document.getElementById('test-api-key-btn');
+    testBtn.disabled = true;
+    testBtn.textContent = '⏳ Testing...';
+
+    try {
+        const response = await fetch('https://chat-api.tamu.ai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'protected.gemini-2.0-flash-lite',
+                messages: [
+                    { role: 'user', content: 'Say "test successful" if you can read this.' }
+                ],
+                stream: false
+            })
+        });
+
+        if (response.ok) {
+            alert('✅ API Key is valid and working!');
+        } else {
+            const errorText = await response.text();
+            alert('❌ API Key test failed.\n\nStatus: ' + response.status + '\nError: ' + errorText);
+        }
+    } catch (error) {
+        alert('❌ Connection error: ' + error.message);
+    } finally {
+        testBtn.disabled = false;
+        testBtn.textContent = '🔍 Test API Key';
+    }
+}
+
+// ========== AI GENERATOR DROPDOWNS ==========
+
+function populateAIGeneratorDropdowns() {
+    // Industry
+    const aiIndustrySelect = document.getElementById('ai-industry-select');
+    aiIndustrySelect.innerHTML = '<option value="">-- Choose an industry --</option>';
+
+    caseData.industries.forEach(industry => {
+        const option = document.createElement('option');
+        option.value = industry.id;
+        option.textContent = `${industry.icon} ${industry.name}`;
+        aiIndustrySelect.appendChild(option);
+    });
+
+    // Case type
+    const aiCaseSelect = document.getElementById('ai-case-select');
+    aiCaseSelect.innerHTML = '<option value="">-- Choose a case type --</option>';
+
+    Object.entries(caseData.case_types).forEach(([id, caseType]) => {
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = `${caseType.name} (${caseType.category})`;
+        aiCaseSelect.appendChild(option);
+    });
 }
 
 // ========== PRACTICE TRACKING ==========
@@ -71,21 +193,16 @@ function updatePracticeStats() {
     const totalTime = practiceHistory.reduce((sum, session) => sum + session.duration, 0);
     const avgTime = totalCases > 0 ? Math.round(totalTime / totalCases) : 0;
 
-    // Count by case type
     const caseTypeCounts = {};
     practiceHistory.forEach(session => {
         caseTypeCounts[session.caseType] = (caseTypeCounts[session.caseType] || 0) + 1;
     });
 
-    // Update stats display
     document.getElementById('total-cases').textContent = totalCases;
     document.getElementById('total-time').textContent = formatTime(totalTime);
     document.getElementById('avg-time').textContent = formatTime(avgTime);
 
-    // Render practice history list
     renderPracticeHistory();
-
-    // Update weak spots
     updateWeakSpots(caseTypeCounts);
 }
 
@@ -96,7 +213,7 @@ function renderPracticeHistory() {
         return;
     }
 
-    const recentHistory = practiceHistory.slice(-10).reverse(); // Last 10, newest first
+    const recentHistory = practiceHistory.slice(-10).reverse();
 
     container.innerHTML = recentHistory.map(session => `
         <div class="history-item">
@@ -114,8 +231,6 @@ function renderPracticeHistory() {
 
 function updateWeakSpots(caseTypeCounts) {
     const container = document.getElementById('weak-spots');
-
-    // Find case types with 0 or 1 practice
     const allCaseTypes = Object.keys(caseData.case_types);
     const weakCases = allCaseTypes.filter(type => (caseTypeCounts[type] || 0) <= 1);
 
@@ -199,7 +314,6 @@ function completeCase() {
 
     clearInterval(timerInterval);
 
-    // Save practice session
     const session = {
         caseType: currentCaseSession.name,
         industry: selectedIndustry ? selectedIndustry.name : null,
@@ -211,10 +325,8 @@ function completeCase() {
     savePracticeHistory();
     updatePracticeStats();
 
-    // Show completion message
     alert(`Great job! You completed a ${currentCaseSession.name} case in ${formatTime(timerSeconds)}.`);
 
-    // Reset
     resetTimer();
     currentCaseSession = null;
     document.getElementById('timer-controls').classList.add('hidden');
@@ -224,17 +336,25 @@ function completeCase() {
 
 async function generateAICase() {
     const apiKey = localStorage.getItem('tamu_api_key');
+    console.log('Retrieving API key from localStorage...');
+    console.log('API key found:', apiKey ? 'Yes (length: ' + apiKey.length + ')' : 'No');
 
     if (!apiKey) {
-        alert('Please enter your TAMU AI API key in the Settings tab first.\n\nGet your key at: https://docs.tamus.ai/');
+        alert('Please enter your TAMU AI API key in the Settings tab first.\n\nGet your key at: https://tamu.ai/');
         document.querySelector('[data-tab="settings"]').click();
         return;
     }
 
-    if (!selectedIndustry || !currentCaseSession) {
-        alert('Please select an industry and click a case type first.');
+    const aiIndustryId = document.getElementById('ai-industry-select').value;
+    const aiCaseId = document.getElementById('ai-case-select').value;
+
+    if (!aiIndustryId || !aiCaseId) {
+        alert('Please select both an industry and a case type from the dropdowns above.');
         return;
     }
+
+    const aiIndustry = caseData.industries.find(i => i.id === aiIndustryId);
+    const aiCaseType = caseData.case_types[aiCaseId];
 
     const generateBtn = document.getElementById('generate-case-btn');
     const outputDiv = document.getElementById('ai-case-output');
@@ -247,34 +367,38 @@ async function generateAICase() {
         const prompt = `You are a McKinsey case interview coach. Generate a realistic consulting case interview prompt.
 
 Requirements:
-- Case Type: ${currentCaseSession.name}
-- Industry: ${selectedIndustry.name}
+- Case Type: ${aiCaseType.name}
+- Industry: ${aiIndustry.name}
 - Include: Client background (1-2 sentences), problem statement, key data points (2-3 metrics), and the question posed to the candidate
 - Make it realistic and representative of actual MBB interviews
 - Keep it concise (4-5 sentences total)
 
 Generate the case prompt now:`;
 
-        // TAMU AI uses OpenAI-compatible API at https://api.tamus.ai/v1
-        const response = await fetch('https://api.tamus.ai/v1/chat/completions', {
+        console.log('Calling TAMU API with key:', apiKey.substring(0, 10) + '...');
+
+        const response = await fetch('https://chat-api.tamu.ai/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'gpt-4',  // TAMU supports multiple models: gpt-4, gpt-4-turbo, claude-3-sonnet, gemini-pro
+                model: 'protected.gemini-2.0-flash-lite',
                 messages: [
                     { role: 'system', content: 'You are a McKinsey case interview coach creating realistic case prompts.' },
                     { role: 'user', content: prompt }
                 ],
                 temperature: 0.8,
-                max_tokens: 300
+                stream: false
             })
         });
 
+        console.log('API Response status:', response.status);
+
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
+            console.error('API Error:', errorData);
             throw new Error(`API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
         }
 
@@ -284,11 +408,14 @@ Generate the case prompt now:`;
         outputDiv.innerHTML = `
             <div class="ai-case-result">
                 <h4>🎯 Generated Case Prompt (via TAMU AI):</h4>
+                <div class="case-metadata">
+                    <strong>Industry:</strong> ${aiIndustry.icon} ${aiIndustry.name} • 
+                    <strong>Type:</strong> ${aiCaseType.name}
+                </div>
                 <div class="generated-prompt">${generatedCase}</div>
                 <button onclick="copyToClipboard(this)" class="btn-copy">📋 Copy to Clipboard</button>
             </div>
         `;
-
     } catch (error) {
         console.error('TAMU AI generation error:', error);
         outputDiv.innerHTML = `
@@ -296,31 +423,24 @@ Generate the case prompt now:`;
                 <p>❌ Error generating case: ${error.message}</p>
                 <p><strong>Troubleshooting:</strong></p>
                 <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li>Check your TAMU API key is correct</li>
+                    <li>Check your TAMU API key is correct in Settings tab</li>
+                    <li>Click "Test API Key" button in Settings to verify</li>
                     <li>Verify you're logged into TAMU with your NetID</li>
                     <li>Check daily token limit hasn't been exceeded (resets 6-7pm CT)</li>
                     <li>Get help at: <a href="https://docs.tamus.ai/" target="_blank">docs.tamus.ai</a></li>
                 </ul>
+                <p><strong>Debug Info:</strong></p>
+                <p style="font-family: monospace; font-size: 0.85em; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                    API Key Length: ${apiKey ? apiKey.length : 0}<br>
+                    Industry: ${aiIndustry ? aiIndustry.name : 'None'}<br>
+                    Case Type: ${aiCaseType ? aiCaseType.name : 'None'}
+                </p>
             </div>
         `;
     } finally {
         generateBtn.disabled = false;
         generateBtn.textContent = '🤖 Generate AI Case';
     }
-}
-
-function saveAPIKey() {
-    const apiKey = document.getElementById('api-key-input').value.trim();
-
-    if (!apiKey) {
-        alert('Please enter an API key.');
-        return;
-    }
-
-    // TAMU API keys don't have a specific prefix like OpenAI's "sk-", so just check it's not empty
-    localStorage.setItem('tamu_api_key', apiKey);
-    alert('TAMU API key saved successfully!\n\nYou can now generate AI cases.');
-    document.getElementById('api-key-input').value = '';
 }
 
 function copyToClipboard(button) {
@@ -343,18 +463,16 @@ function initTabs() {
         button.addEventListener('click', () => {
             const targetTab = button.dataset.tab;
 
-            // Update active button
             tabButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
-            // Update visible pane
             tabPanes.forEach(pane => pane.classList.remove('active'));
             document.getElementById(`${targetTab}-tab`).classList.add('active');
         });
     });
 }
 
-// ========== ORIGINAL FUNCTIONS (from previous version) ==========
+// ========== FRAMEWORK TAB (ORIGINAL) ==========
 
 function populateIndustryDropdown() {
     const select = document.getElementById('industry-select');
@@ -432,23 +550,14 @@ function createCaseCard(caseType, isHighlighted) {
 }
 
 function showCaseDetail(caseType) {
-    currentCaseSession = caseType; // Track selected case for timer
+    currentCaseSession = caseType;
 
     const modal = document.getElementById('case-modal');
     const modalBody = document.getElementById('modal-body');
 
-    const frameworkSteps = caseType.framework.steps
-        .map(step => `<li>${step}</li>`)
-        .join('');
-
-    const questions = caseType.clarifying_questions
-        .map(q => `<li>${q}</li>`)
-        .join('');
-
-    const pitfalls = caseType.common_pitfalls
-        .map(p => `<li>${p}</li>`)
-        .join('');
-
+    const frameworkSteps = caseType.framework.steps.map(step => `<li>${step}</li>`).join('');
+    const questions = caseType.clarifying_questions.map(q => `<li>${q}</li>`).join('');
+    const pitfalls = caseType.common_pitfalls.map(p => `<li>${p}</li>`).join('');
     const keyAreas = caseType.framework.key_areas.join(' • ');
 
     modalBody.innerHTML = `
@@ -516,8 +625,8 @@ function renderComboCases() {
     });
 }
 
-// Initialize on page load
+// ========== BOOTSTRAP ==========
+
 document.addEventListener('DOMContentLoaded', () => {
     init();
-    initTabs();
 });

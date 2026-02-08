@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Case Interview Framework Navigator - TAMU Edition</title>
-    <link rel="stylesheet" href="styles_enhanced.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
@@ -137,18 +137,31 @@
         <div id="ai-tab" class="tab-pane">
             <div class="ai-container">
                 <h2>🤖 TAMU AI Case Generator</h2>
-                <p class="instructions">Generate custom case prompts using TAMU AI (powered by GPT-4, Claude, or Gemini). Select an industry and case type first.</p>
+                <p class="instructions">Generate custom case prompts using TAMU AI (powered by GPT-4, Claude, or Gemini).</p>
+
+                <!-- NEW: Industry and Case Type Selectors -->
+                <div class="ai-selector-section">
+                    <h3>Step 1: Select Industry and Case Type</h3>
+                    <div class="selector-group">
+                        <div class="selector-item">
+                            <label for="ai-industry-select">Industry:</label>
+                            <select id="ai-industry-select" class="ai-select">
+                                <option value="">-- Choose an industry --</option>
+                            </select>
+                        </div>
+                        <div class="selector-item">
+                            <label for="ai-case-select">Case Type:</label>
+                            <select id="ai-case-select" class="ai-select">
+                                <option value="">-- Choose a case type --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="ai-info">
-                    <h3>How It Works:</h3>
-                    <ol>
-                        <li>Set up your TAMU API key in <strong>Settings</strong> tab (one time)</li>
-                        <li>Go to <strong>Frameworks</strong> tab and select an industry</li>
-                        <li>Click a case type (e.g., Profitability)</li>
-                        <li>Come back here and click "Generate AI Case"</li>
-                        <li>Get a custom case prompt for that industry and case type</li>
-                    </ol>
-                    <p style="margin-top: 15px;"><strong>✅ Free with TAMU NetID!</strong> Daily token limit resets 6-7 PM CT.</p>
+                    <h3>Step 2: Generate Your Case</h3>
+                    <p>Click the button below to generate a custom case prompt for the selected industry and case type.</p>
+                    <p style="margin-top: 10px;"><strong>✅ Free with TAMU NetID!</strong> Daily token limit resets 6-7 PM CT.</p>
                 </div>
 
                 <div class="ai-controls">
@@ -179,17 +192,23 @@
                         <strong>How to get your key:</strong><br>
                         1. Go to <a href="https://tamu.ai/" target="_blank">tamu.ai</a><br>
                         2. Log in with your NetID and password<br>
-                        3. Go to API Documentation: <a href="https://docs.tamus.ai/" target="_blank">docs.tamus.ai</a><br>
+                        3. Navigate to API settings or documentation<br>
                         4. Generate an API key<br>
                         5. Copy and paste it below
                     </p>
 
                     <div class="input-group">
-                        <input type="password" id="api-key-input" placeholder="Your TAMU API key..." class="api-key-input">
+                        <input type="password" id="api-key-input" placeholder="Paste your TAMU API key here..." class="api-key-input">
                         <button id="save-api-key-btn" class="btn-primary">💾 Save Key</button>
                     </div>
 
-                    <p class="settings-note">⚠️ Your API key is stored only in your browser's local storage and is only sent to TAMU AI servers (api.tamus.ai).</p>
+                    <div id="api-key-status" style="margin: 15px 0;">
+                        <p style="color: #6c757d;">No API key saved yet</p>
+                    </div>
+
+                    <button id="test-api-key-btn" class="btn-secondary">🔍 Test API Key</button>
+
+                    <p class="settings-note">⚠️ Your API key is stored only in your browser's local storage and is only sent to TAMU AI servers (chat-api.tamu.ai).</p>
                     <p class="settings-note">✅ Free daily token limit with your NetID. Tokens reset between 6-7 PM Central Time.</p>
                 </div>
 
@@ -197,12 +216,28 @@
                     <h3>🤖 Available AI Models</h3>
                     <p>TAMU AI Chat provides access to multiple models:</p>
                     <ul style="line-height: 2; margin: 15px 0;">
+                        <li><strong>Gemini 2.0 Flash Lite</strong> (Google) - Fast and efficient (currently selected)</li>
                         <li><strong>GPT-4</strong> (OpenAI) - Best for complex reasoning</li>
-                        <li><strong>GPT-4 Turbo</strong> (OpenAI) - Faster, still high quality</li>
                         <li><strong>Claude 3 Sonnet</strong> (Anthropic) - Great for analysis</li>
-                        <li><strong>Gemini Pro</strong> (Google) - Good for research tasks</li>
                     </ul>
-                    <p style="font-size: 0.9rem; color: #6c757d;">Default model in this app: GPT-4. To change, edit app_tamu.js line ~200.</p>
+                    <p style="font-size: 0.9rem; color: #6c757d;">To change model, edit app.js.</p>
+                </div>
+
+                <div class="settings-section">
+                    <h3>🐛 Troubleshooting</h3>
+                    <p><strong>API Key Not Saving?</strong></p>
+                    <ul style="margin: 10px 0; line-height: 1.8;">
+                        <li>Check the "API Key Status" above after saving</li>
+                        <li>Try clearing browser cache and re-entering key</li>
+                        <li>Use the "Test API Key" button to verify it works</li>
+                    </ul>
+                    <p><strong>Generation Failing?</strong></p>
+                    <ul style="margin: 10px 0; line-height: 1.8;">
+                        <li>Check you're logged into tamu.ai with your NetID</li>
+                        <li>Verify daily token limit hasn't been exceeded</li>
+                        <li>Try the "Test API Key" button</li>
+                        <li>Check browser console (F12) for errors</li>
+                    </ul>
                 </div>
 
                 <div class="settings-section">
@@ -237,6 +272,6 @@
         </footer>
     </div>
 
-    <script src="app_tamu.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
