@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Interview Framework Navigator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>📊 Case Interview Framework Navigator</h1>
+            <p class="subtitle">Explore frameworks and approaches for consulting case interviews</p>
+        </header>
+
+        <!-- Industry Selector -->
+        <section class="industry-selector">
+            <div class="selector-group">
+                <label for="industry-select">Select Industry:</label>
+                <select id="industry-select">
+                    <option value="">-- Choose an industry --</option>
+                </select>
+                <button id="random-industry-btn" class="btn-secondary">🎲 Random Industry</button>
+            </div>
+        </section>
+
+        <!-- Selected Industry Display -->
+        <div id="selected-industry" class="selected-industry hidden">
+            <h2 id="industry-name"></h2>
+            <p>Most relevant case types for this industry:</p>
+        </div>
+
+        <!-- Case Type Grid -->
+        <section id="case-grid" class="case-grid">
+            <!-- Case cards will be inserted here by JavaScript -->
+        </section>
+
+        <!-- Case Detail Modal -->
+        <div id="case-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <div id="modal-body">
+                    <!-- Case details will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Combo Cases Section -->
+        <section class="combo-section">
+            <h2>🔗 Common Combo Cases</h2>
+            <p class="section-subtitle">Real cases often combine multiple frameworks</p>
+            <div id="combo-grid" class="combo-grid">
+                <!-- Combo cards will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Built for consulting interview prep • Based on MBB frameworks</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

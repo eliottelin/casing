@@ -1,0 +1,636 @@
+{
+  "app_metadata": {
+    "name": "Case Interview Framework Navigator",
+    "version": "1.0",
+    "description": "Interactive tool to explore case types and frameworks by industry"
+  },
+  "industries": [
+    {
+      "id": "tech",
+      "name": "Technology & Software",
+      "icon": "\ud83d\udcbb"
+    },
+    {
+      "id": "healthcare",
+      "name": "Healthcare & Pharma",
+      "icon": "\ud83c\udfe5"
+    },
+    {
+      "id": "consumer",
+      "name": "Consumer Goods & Retail",
+      "icon": "\ud83d\uded2"
+    },
+    {
+      "id": "finance",
+      "name": "Financial Services",
+      "icon": "\ud83d\udcb0"
+    },
+    {
+      "id": "energy",
+      "name": "Energy & Utilities",
+      "icon": "\u26a1"
+    },
+    {
+      "id": "manufacturing",
+      "name": "Manufacturing",
+      "icon": "\ud83c\udfed"
+    },
+    {
+      "id": "media",
+      "name": "Media & Entertainment",
+      "icon": "\ud83c\udfac"
+    },
+    {
+      "id": "telecom",
+      "name": "Telecommunications",
+      "icon": "\ud83d\udcf1"
+    },
+    {
+      "id": "transport",
+      "name": "Transportation & Logistics",
+      "icon": "\ud83d\ude9a"
+    },
+    {
+      "id": "hospitality",
+      "name": "Hospitality & Tourism",
+      "icon": "\ud83c\udfe8"
+    },
+    {
+      "id": "education",
+      "name": "Education",
+      "icon": "\ud83d\udcda"
+    },
+    {
+      "id": "realestate",
+      "name": "Real Estate",
+      "icon": "\ud83c\udfe2"
+    },
+    {
+      "id": "agriculture",
+      "name": "Agriculture & Food",
+      "icon": "\ud83c\udf3e"
+    },
+    {
+      "id": "automotive",
+      "name": "Automotive",
+      "icon": "\ud83d\ude97"
+    },
+    {
+      "id": "aerospace",
+      "name": "Aerospace & Defense",
+      "icon": "\u2708\ufe0f"
+    }
+  ],
+  "case_types": {
+    "profitability": {
+      "id": "profitability",
+      "name": "Profitability",
+      "category": "core",
+      "difficulty": "medium",
+      "duration": "30-40 min",
+      "description": "Diagnose why profits are declining and recommend improvements",
+      "when_used": "When a company's profits are falling, margins are compressed, or costs are rising faster than revenue",
+      "framework": {
+        "steps": [
+          "Clarify objective (total profit vs margin, time horizon, scope)",
+          "Decompose: Profit = Revenue - Costs",
+          "Revenue breakdown: Price \u00d7 Volume by segment/product/channel",
+          "Cost breakdown: Variable (scale with volume) vs Fixed costs",
+          "Root cause analysis: market trends, competition, internal efficiency",
+          "Generate solutions across revenue and cost levers",
+          "Prioritize by impact, feasibility, and timeline"
+        ],
+        "key_areas": [
+          "Revenue (Price, Volume, Mix)",
+          "Variable Costs",
+          "Fixed Costs",
+          "Market & Competition",
+          "Operations"
+        ]
+      },
+      "clarifying_questions": [
+        "Is revenue flat, declining, or growing?",
+        "Which product lines or segments are affected?",
+        "Have there been recent operational or strategic changes?",
+        "What is the competitive landscape?"
+      ],
+      "common_pitfalls": [
+        "Jumping to solutions before diagnosing the problem",
+        "Not separating fixed vs variable costs",
+        "Ignoring external market factors"
+      ],
+      "example_prompt": "Our client is a 90-year-old beer company. Market declining 2%/year, but their profits dropped 15% last year despite selling 10M bottles. How do we grow the brand without lowering profits?"
+    },
+    "market_sizing": {
+      "id": "market_sizing",
+      "name": "Market Sizing",
+      "category": "core",
+      "difficulty": "easy",
+      "duration": "15-20 min",
+      "description": "Estimate the size of a market in revenue or units",
+      "when_used": "To evaluate market opportunity for new products, market entry, or investment decisions",
+      "framework": {
+        "steps": [
+          "Clarify: what to measure (revenue/units/customers), geography, time period",
+          "Choose approach: Top-down (population) or Bottom-up (segmentation)",
+          "Break into logical components with clear math structure",
+          "Make reasonable assumptions and state them explicitly",
+          "Calculate step-by-step, keeping numbers round",
+          "Sanity check: does the result make intuitive sense?"
+        ],
+        "key_areas": [
+          "Total Population",
+          "Target Segments",
+          "Usage/Frequency",
+          "Price Points",
+          "Market Penetration"
+        ]
+      },
+      "clarifying_questions": [
+        "What geography should we focus on?",
+        "Are we measuring total addressable market or served market?",
+        "What's the time period (annual, quarterly)?",
+        "Should we include adjacent/substitute products?"
+      ],
+      "common_pitfalls": [
+        "Making calculations too complex",
+        "Not stating assumptions clearly",
+        "Forgetting to sanity-check the final number"
+      ],
+      "example_prompt": "Estimate the annual revenue of the coffee shop market in Austin, Texas."
+    },
+    "market_entry": {
+      "id": "market_entry",
+      "name": "Market Entry",
+      "category": "strategic",
+      "difficulty": "hard",
+      "duration": "35-45 min",
+      "description": "Should a company enter a new market or geography?",
+      "when_used": "When a company considers expanding into new geographies, customer segments, or adjacent markets",
+      "framework": {
+        "steps": [
+          "Market attractiveness: size, growth rate, profitability, competitive intensity",
+          "Company fit: capabilities, brand strength, resources, strategic alignment",
+          "Entry barriers: regulations, capital requirements, distribution channels, local relationships",
+          "Entry mode: organic build, acquisition, partnership, joint venture",
+          "Financial analysis: investment required vs expected returns (NPV, payback)",
+          "Risk assessment: regulatory, competitive response, execution, cultural",
+          "Recommendation with clear go/no-go decision"
+        ],
+        "key_areas": [
+          "Market Attractiveness",
+          "Competitive Landscape",
+          "Company Capabilities",
+          "Entry Strategy",
+          "Financial Viability",
+          "Risks"
+        ]
+      },
+      "clarifying_questions": [
+        "What is our objective (revenue target, strategic footprint)?",
+        "Do we have any existing presence or partnerships?",
+        "What are the major regulatory hurdles?",
+        "What's our time horizon for profitability?"
+      ],
+      "common_pitfalls": [
+        "Only focusing on market size without competition analysis",
+        "Ignoring regulatory and cultural barriers",
+        "Not considering alternative entry modes"
+      ],
+      "example_prompt": "A US-based fitness chain wants to enter the Southeast Asian market. Should they proceed, and if so, how?"
+    },
+    "new_product": {
+      "id": "new_product",
+      "name": "New Product Launch",
+      "category": "strategic",
+      "difficulty": "medium",
+      "duration": "30-40 min",
+      "description": "Should a company launch a new product or service?",
+      "when_used": "When considering developing and launching new products or services",
+      "framework": {
+        "steps": [
+          "Customer demand: unmet needs, target segments, willingness to pay, market size",
+          "Competitive landscape: existing solutions, substitutes, differentiation opportunity",
+          "Company capabilities: technology/IP, production, distribution, brand fit",
+          "Economics: development costs, unit economics, pricing strategy, volume projections",
+          "Go-to-market: channels, marketing, sales strategy, timing",
+          "Risks: cannibalization, competitive response, execution challenges",
+          "Financial recommendation: expected profit/ROI, break-even timeline"
+        ],
+        "key_areas": [
+          "Customer Need",
+          "Competition",
+          "Capabilities",
+          "Unit Economics",
+          "GTM Strategy",
+          "Cannibalization Risk"
+        ]
+      },
+      "clarifying_questions": [
+        "What customer problem does this solve?",
+        "How is it differentiated from existing solutions?",
+        "Do we have the capabilities to deliver it?",
+        "Will it cannibalize our existing products?"
+      ],
+      "common_pitfalls": [
+        "Not assessing cannibalization impact",
+        "Underestimating time-to-market",
+        "Ignoring competitive response"
+      ],
+      "example_prompt": "A premium coffee chain is considering launching a line of ready-to-drink bottled coffee for grocery stores. Should they do it?"
+    },
+    "ma": {
+      "id": "ma",
+      "name": "M&A (Mergers & Acquisitions)",
+      "category": "strategic",
+      "difficulty": "hard",
+      "duration": "40-50 min",
+      "description": "Should a company acquire or merge with another company?",
+      "when_used": "When evaluating acquisition targets or merger opportunities",
+      "framework": {
+        "steps": [
+          "Strategic rationale: why acquire (capabilities, market share, vertical integration, technology)",
+          "Market analysis: target's industry attractiveness, growth trajectory, competitive position",
+          "Target assessment: financial health, assets, management quality, culture",
+          "Synergies quantification: cost synergies (eliminate redundancies, scale) and revenue synergies (cross-sell, market access)",
+          "Valuation: DCF, comparable companies, precedent transactions; walk-away price",
+          "Integration risks: cultural fit, customer/talent retention, execution complexity",
+          "Recommendation: acquire/pass, price range, deal structure"
+        ],
+        "key_areas": [
+          "Strategic Fit",
+          "Market Position",
+          "Synergies",
+          "Valuation",
+          "Integration Risk",
+          "Alternatives"
+        ]
+      },
+      "clarifying_questions": [
+        "Why acquire vs build capabilities internally?",
+        "What specific synergies can we capture?",
+        "What is the target company worth?",
+        "What are the integration challenges?"
+      ],
+      "common_pitfalls": [
+        "Overestimating synergies",
+        "Ignoring cultural fit and integration complexity",
+        "Not considering alternatives (partnerships, organic growth)"
+      ],
+      "example_prompt": "A regional bank is considering acquiring a fintech startup with a mobile banking platform. Should they proceed?"
+    },
+    "pricing": {
+      "id": "pricing",
+      "name": "Pricing Strategy",
+      "category": "tactical",
+      "difficulty": "medium",
+      "duration": "25-35 min",
+      "description": "How should a company price its product or service?",
+      "when_used": "When launching new products, repositioning existing ones, or responding to competitive pressure",
+      "framework": {
+        "steps": [
+          "Cost floor: variable cost per unit (minimum price to avoid losses)",
+          "Customer value: willingness to pay, perceived value, price sensitivity by segment",
+          "Competition: competitive pricing, market positioning (premium/mid/value)",
+          "Business objectives: maximize volume, margin, or market share",
+          "Pricing architecture: flat, tiered, subscription, usage-based, freemium, dynamic",
+          "Test and validate: surveys, conjoint analysis, A/B tests, pilot programs",
+          "Recommendation with expected volume and profit impact"
+        ],
+        "key_areas": [
+          "Cost Structure",
+          "Customer WTP",
+          "Competitive Pricing",
+          "Pricing Model",
+          "Profit Impact"
+        ]
+      },
+      "clarifying_questions": [
+        "What is our cost structure per unit?",
+        "How price-sensitive are customers?",
+        "What do competitors charge?",
+        "Are we a premium or value brand?"
+      ],
+      "common_pitfalls": [
+        "Pricing below variable cost without strategic reason",
+        "Ignoring customer segmentation",
+        "Not testing price sensitivity"
+      ],
+      "example_prompt": "A SaaS company currently charges a flat $50/month. They want to optimize pricing. What should they do?"
+    },
+    "growth": {
+      "id": "growth",
+      "name": "Revenue Growth",
+      "category": "strategic",
+      "difficulty": "medium",
+      "duration": "30-40 min",
+      "description": "How can a company increase revenue?",
+      "when_used": "When a profitable company wants to accelerate top-line growth",
+      "framework": {
+        "steps": [
+          "Current state: revenue breakdown by product, segment, channel, geography",
+          "Growth levers: increase prices, sell more to existing customers (frequency/basket), acquire new customers, new products, new markets",
+          "Market opportunity: current penetration rates, addressable market, adjacent segments",
+          "Competitive positioning: share gains, differentiation, marketing effectiveness",
+          "Profit impact: ensure growth is profitable (check unit economics, CAC/LTV)",
+          "Prioritize initiatives: quick wins vs long-term bets, expected ROI",
+          "Implementation roadmap with milestones"
+        ],
+        "key_areas": [
+          "Current Revenue Mix",
+          "Market Penetration",
+          "Customer Acquisition",
+          "Pricing",
+          "New Products/Markets",
+          "Profitability"
+        ]
+      },
+      "clarifying_questions": [
+        "Where does revenue come from today?",
+        "What is our market share by segment?",
+        "Which customer segments have highest growth potential?",
+        "Are there constraints (capital, capacity, brand)?"
+      ],
+      "common_pitfalls": [
+        "Pursuing revenue at expense of profitability",
+        "Not segmenting growth opportunities",
+        "Ignoring execution feasibility"
+      ],
+      "example_prompt": "A regional grocery chain has flat revenue for 3 years. How can they grow top line by 15% in the next 2 years?"
+    },
+    "cost_reduction": {
+      "id": "cost_reduction",
+      "name": "Cost Reduction",
+      "category": "tactical",
+      "difficulty": "medium",
+      "duration": "25-35 min",
+      "description": "How can a company reduce costs sustainably?",
+      "when_used": "When margins are compressed, facing competitive pressure, or preparing for downturn",
+      "framework": {
+        "steps": [
+          "Cost breakdown: by category (COGS, labor, SG&A, overhead, capex)",
+          "Benchmarking: compare to competitors and industry standards",
+          "Opportunity identification: high-cost areas, inefficiencies, redundancies, low-value activities",
+          "Generate ideas: process improvements, sourcing/procurement, automation, outsourcing, footprint optimization, scope reduction",
+          "Impact analysis: savings vs impact on quality, service, employee morale",
+          "Quick wins vs transformational: 30/60/90-day roadmap",
+          "Implementation risks and change management"
+        ],
+        "key_areas": [
+          "Cost Structure",
+          "Benchmarks",
+          "Process Efficiency",
+          "Sourcing",
+          "Scope Optimization",
+          "Quality Trade-offs"
+        ]
+      },
+      "clarifying_questions": [
+        "Which cost categories are highest or fastest-growing?",
+        "How do we compare to competitors on cost structure?",
+        "Are there obvious inefficiencies or redundancies?",
+        "What are constraints (quality, service levels, labor relations)?"
+      ],
+      "common_pitfalls": [
+        "Cutting costs that hurt customer experience",
+        "Not distinguishing one-time vs recurring savings",
+        "Ignoring implementation complexity"
+      ],
+      "example_prompt": "A manufacturing company needs to cut costs by 20% to remain competitive. Where should they focus?"
+    },
+    "operations": {
+      "id": "operations",
+      "name": "Operational Improvement",
+      "category": "tactical",
+      "difficulty": "medium",
+      "duration": "30-35 min",
+      "description": "How can operations be improved for efficiency?",
+      "when_used": "When operational metrics (throughput, quality, cycle time) lag benchmarks or when scaling",
+      "framework": {
+        "steps": [
+          "Current state: map process, measure KPIs (throughput, quality, utilization, cycle time)",
+          "Benchmarking: best-in-class performance internally and externally",
+          "Root cause analysis: why are we underperforming (capacity, quality, process design, people, technology)?",
+          "Improvement levers: process redesign, lean/six sigma, automation, training, quality systems, capacity balancing",
+          "Quantify impact: efficiency gains, cost reduction, revenue upside from better service",
+          "Pilot and scale: test in one location/line, then roll out",
+          "Change management and sustainability"
+        ],
+        "key_areas": [
+          "Process Mapping",
+          "Bottlenecks",
+          "Quality Issues",
+          "Utilization",
+          "Technology/Automation",
+          "Training"
+        ]
+      },
+      "clarifying_questions": [
+        "What are the key operational KPIs?",
+        "Where are the bottlenecks in the process?",
+        "What does best-in-class look like?",
+        "Have we tried improvements before?"
+      ],
+      "common_pitfalls": [
+        "Optimizing one step without seeing whole system",
+        "Not validating root causes with data",
+        "Underestimating change management"
+      ],
+      "example_prompt": "A distribution center has 60% utilization vs 85% industry benchmark. How do we improve?"
+    },
+    "turnaround": {
+      "id": "turnaround",
+      "name": "Turnaround / Restructuring",
+      "category": "strategic",
+      "difficulty": "hard",
+      "duration": "40-50 min",
+      "description": "How to save a company in crisis?",
+      "when_used": "When a company is losing money, burning cash, facing bankruptcy, or under severe distress",
+      "framework": {
+        "steps": [
+          "Diagnose crisis: cash runway, profitability by segment, debt obligations, operational issues, root causes",
+          "Stabilize immediately: cut unprofitable lines, reduce cash burn, renegotiate debt, secure bridge financing",
+          "Assess viability: is core business worth saving? Which assets/segments to keep vs divest?",
+          "Strategic options: restructure operations, sell non-core assets, merge/acquire, liquidate",
+          "Fix operations: profitability improvements (pricing, costs), efficiency gains",
+          "Long-term strategy: sustainable business model, competitive positioning",
+          "Stakeholder management: creditors, employees, customers, board"
+        ],
+        "key_areas": [
+          "Cash Position",
+          "Profitability by Segment",
+          "Immediate Actions",
+          "Asset Disposition",
+          "Operational Fixes",
+          "Viability"
+        ]
+      },
+      "clarifying_questions": [
+        "How much cash runway do we have?",
+        "What is driving the crisis (market, competition, operations)?",
+        "Which parts of the business are viable?",
+        "What are stakeholder constraints (debt covenants, labor)?"
+      ],
+      "common_pitfalls": [
+        "Not acting fast enough on cash stabilization",
+        "Trying to save everything",
+        "Underestimating severity of situation"
+      ],
+      "example_prompt": "A retail chain has lost money for 3 consecutive years, cash runway of 6 months. What should they do?"
+    }
+  },
+  "industry_relevance": {
+    "tech": [
+      "profitability",
+      "growth",
+      "new_product",
+      "ma",
+      "pricing",
+      "market_entry"
+    ],
+    "healthcare": [
+      "profitability",
+      "ma",
+      "market_entry",
+      "operations",
+      "cost_reduction",
+      "pricing"
+    ],
+    "consumer": [
+      "profitability",
+      "growth",
+      "new_product",
+      "pricing",
+      "market_entry",
+      "market_sizing"
+    ],
+    "finance": [
+      "profitability",
+      "ma",
+      "cost_reduction",
+      "operations",
+      "market_entry",
+      "turnaround"
+    ],
+    "energy": [
+      "profitability",
+      "ma",
+      "market_entry",
+      "operations",
+      "cost_reduction",
+      "turnaround"
+    ],
+    "manufacturing": [
+      "profitability",
+      "operations",
+      "cost_reduction",
+      "ma",
+      "turnaround",
+      "market_entry"
+    ],
+    "media": [
+      "growth",
+      "new_product",
+      "profitability",
+      "ma",
+      "pricing",
+      "turnaround"
+    ],
+    "telecom": [
+      "profitability",
+      "market_entry",
+      "ma",
+      "cost_reduction",
+      "operations",
+      "pricing"
+    ],
+    "transport": [
+      "profitability",
+      "operations",
+      "cost_reduction",
+      "ma",
+      "market_entry",
+      "growth"
+    ],
+    "hospitality": [
+      "profitability",
+      "growth",
+      "pricing",
+      "market_entry",
+      "operations",
+      "turnaround"
+    ],
+    "education": [
+      "growth",
+      "new_product",
+      "pricing",
+      "profitability",
+      "market_entry",
+      "operations"
+    ],
+    "realestate": [
+      "profitability",
+      "ma",
+      "market_entry",
+      "pricing",
+      "growth",
+      "operations"
+    ],
+    "agriculture": [
+      "profitability",
+      "operations",
+      "cost_reduction",
+      "market_entry",
+      "growth",
+      "new_product"
+    ],
+    "automotive": [
+      "profitability",
+      "operations",
+      "ma",
+      "cost_reduction",
+      "new_product",
+      "turnaround"
+    ],
+    "aerospace": [
+      "profitability",
+      "ma",
+      "operations",
+      "cost_reduction",
+      "new_product",
+      "market_entry"
+    ]
+  },
+  "combo_cases": [
+    {
+      "name": "Profitability + Market Entry",
+      "description": "Company is profitable in home market but considering expansion; need to assess new market while maintaining current profitability",
+      "example": "Profitable US retailer considering Europe; analyze home profit drivers and new market opportunity"
+    },
+    {
+      "name": "M&A + Market Sizing",
+      "description": "Evaluating acquisition target; need to size target's market to assess growth potential and valuation",
+      "example": "Tech company acquiring a startup; size the addressable market for the startup's product"
+    },
+    {
+      "name": "Turnaround + Profitability",
+      "description": "Company in distress; diagnose profit issues and develop stabilization plan",
+      "example": "Retail chain losing money; identify unprofitable stores and product lines to cut"
+    },
+    {
+      "name": "Growth + Pricing",
+      "description": "Company wants to grow revenue; need to evaluate if pricing changes (increases or new tiers) can drive growth",
+      "example": "SaaS company with flat growth; assess if premium tier or price increase can boost revenue"
+    },
+    {
+      "name": "New Product + Market Sizing",
+      "description": "Evaluate launching new product; need to size the market opportunity first",
+      "example": "Food company considering plant-based line; size the market before product decision"
+    },
+    {
+      "name": "Cost Reduction + Operations",
+      "description": "Reduce costs through operational improvements rather than just headcount cuts",
+      "example": "Manufacturer with high costs; improve production efficiency and reduce waste"
+    }
+  ]
+}
